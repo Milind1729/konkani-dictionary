@@ -6,7 +6,7 @@ const Header = ({ isDarkMode, toggleTheme }) => {
     <header className="flex items-center justify-between bg-[#f1faf9] dark:bg-[#040404f7] p-4 shadow-md">
       <div className="flex items-center space-x-2">
         <img
-          src="/src/assets/dictionary.png"
+          src="/dictionary.png"
           alt="Logo"
           className="w-8 h-8 object-contain"
         />
