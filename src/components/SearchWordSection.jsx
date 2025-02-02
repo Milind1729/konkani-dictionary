@@ -44,10 +44,18 @@ const SearchWordSection = () => {
         const wordsArray = querySnapshot.docs.map((doc) => doc.data());
 
         console.log('Fetched data from Firestore');
-        // Find the word 
-        const word = wordsArray.find(word => word.latinForm.toLowerCase() === latinForm.toLowerCase());
-        setWordData(word);
+        // Ensure wordsArray is valid and filter out invalid objects
+        const validWords = wordsArray.filter(word => word && word.latinForm);
 
+        // Find the word in a case-insensitive way
+        const word = validWords.find(word => word.latinForm.toLowerCase() === latinForm.toLowerCase());
+
+        if (word) {
+          setWordData(word);
+        } else {
+          setError('Word not found');
+          setWordData(null);
+        }
         // Store the fetched data in localStorage for future use
         localStorage.setItem('konkaniWords', JSON.stringify(wordsArray));
       }
