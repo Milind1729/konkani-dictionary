@@ -1,26 +1,42 @@
 // src/components/RandomWordSection.js
 import React, { useState, useEffect } from 'react';
 import WordCard from './WordCard';
+import { db } from '../firebase'; // Import Firebase configuration
+import { collection, getDocs } from 'firebase/firestore';
 
 const RandomWordSection = () => {
   const [wordData, setWordData] = useState(null);
 
-  // Fetch a random word from the Express server API
+  // Function to fetch data from Firestore and store in localStorage
   const fetchRandomWord = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/random-word'); 
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        setWordData(data); 
+      // Check if data exists in localStorage
+      const storedData = localStorage.getItem('konkaniWords');
+      if (storedData) {
+        console.log('Using stored data from localStorage');
+        const wordsArray = JSON.parse(storedData);
+        // Pick a random word from the stored data
+        const randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
+        setWordData(randomWord);
       } else {
-        console.error('Failed to fetch random word');
+        // Fetch data from Firestore if not available in localStorage
+        const wordsRef = collection(db, 'konkaniWords');
+        const querySnapshot = await getDocs(wordsRef);
+        const wordsArray = querySnapshot.docs.map((doc) => doc.data());
+
+        console.log('Fetched data from Firestore');
+        // Pick a random word from the Firestore data
+        const randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
+
+        setWordData(randomWord);
+
+        // Store the fetched data in localStorage for future use
+        localStorage.setItem('konkaniWords', JSON.stringify(wordsArray));
       }
     } catch (error) {
       console.error('Error fetching random word:', error);
     }
   };
-
   useEffect(() => {
     fetchRandomWord();  // Fetch an initial random word
   }, []);

@@ -6,27 +6,50 @@ const SearchWordSection = () => {
   const [wordData, setWordData] = useState(null);
   const [error, setError] = useState(null);
 
-  // Fetch a word by Latin form from the Express server API
+  // Fetch a word by Latin form from localStorage or Firestore
   const fetchWordByLatin = async () => {
+
     if (!latinForm) {
       setError('Please enter a Latin form');
       return;
     }
-    
+
     setError(null); // Clear previous error
 
     try {
-      const response = await fetch(`http://localhost:5000/api/search-latin?latinForm=${latinForm}`);
-      if (response.ok) {
-        const data = await response.json();
-        setWordData(data); // Set the found word data
+      // Check if data exists in localStorage
+      const storedData = localStorage.getItem('konkaniWords');
+      if (storedData) {
+        console.log('Using stored data from localStorage');
+        const wordsArray = JSON.parse(storedData);
+        // Ensure wordsArray is valid and filter out invalid objects
+        const validWords = wordsArray.filter(word => word && word.latinForm);
+
+        // Find the word in a case-insensitive way
+        const word = validWords.find(word => word.latinForm.toLowerCase() === latinForm.toLowerCase());
+
+        if (word) {
+          setWordData(word);
+        } else {
+          setError('Word not found');
+          setWordData(null);
+        }
       } else {
-        const errorData = await response.json();
-        setError(errorData.message); // Set error message if word not found
-        setWordData(null); // Clear word data on error
+        // Fetch data from Firestore if not available in localStorage
+        const wordsRef = collection(db, 'konkaniWords');
+        const querySnapshot = await getDocs(wordsRef);
+        const wordsArray = querySnapshot.docs.map((doc) => doc.data());
+
+        console.log('Fetched data from Firestore');
+        // Find the word 
+        const word = wordsArray.find(word => word.latinForm.toLowerCase() === latinForm.toLowerCase());
+        setWordData(word);
+
+        // Store the fetched data in localStorage for future use
+        localStorage.setItem('konkaniWords', JSON.stringify(wordsArray));
       }
     } catch (error) {
-      setError('Error fetching word. Please try again later.');
+      setError('Error fetching word. Please try again later.' + error);
       setWordData(null); // Clear word data on error
     }
   };
@@ -48,7 +71,7 @@ const SearchWordSection = () => {
           placeholder="Search for a word by Latin form"
           value={latinForm}
           onChange={(e) => setLatinForm(e.target.value)} // Update input value in state
-        onKeyDown={handleKeyDown}
+          onKeyDown={handleKeyDown}
         />
       </section>
 

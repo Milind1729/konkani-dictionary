@@ -22,9 +22,9 @@ const Header = ({ isDarkMode, toggleTheme }) => {
         <Link to="/randomword" className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
           Random Word
         </Link>
-        <Link to="/addword" className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
+        {/* <Link to="/addword" className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
           Add Words
-        </Link>
+        </Link> */}
         <Link to="/contact" className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
           Contact
         </Link>
