@@ -17,7 +17,7 @@ const WordCard = ({ wordData }) => {
   const capitalizeFirstLetter = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
   return (
-    <section className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg mb-10 max-w-3xl mx-auto">
+    <section className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg mb-10 max-w-3xl mx-auto mt-10">
       
       {/* Word centered with a box */}
       <h2 className="px-6 py-4 rounded-lg text-4xl font-semibold text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 max-w-fit mb-6 text-center">
@@ -70,12 +70,19 @@ const WordCard = ({ wordData }) => {
       )}
 
       {/* Synonyms */}
-      {synonyms && synonyms.length > 0 && (
-        <div className="mb-6 text-left">
-          <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">Synonyms</h3>
-          <p className="text-gray-700 dark:text-gray-400 text-lg">{synonyms.join(', ')}</p>
-        </div>
-      )}
+{synonyms && synonyms.length > 0 && (
+  <div className="mb-6 text-left">
+    <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">Synonyms</h3>
+    <p className="text-gray-700 dark:text-gray-400 text-lg">
+      {synonyms.map((synonym, index) => (
+        <span key={index}>
+          {synonym.word || synonym.roman} {/* Display word or roman */}
+          {index < synonyms.length - 1 && ", "} {/* Add comma between synonyms */}
+        </span>
+      ))}
+    </p>
+  </div>
+)}
 
       {/* Pronunciation */}
       {sounds && sounds.length > 0 && (

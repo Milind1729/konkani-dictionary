@@ -6,6 +6,7 @@ import { collection, getDocs } from 'firebase/firestore';
 
 const RandomWordSection = () => {
   const [wordData, setWordData] = useState(null);
+  
 
   // Function to fetch data from Firestore and store in localStorage
   const fetchRandomWord = async () => {
@@ -18,6 +19,7 @@ const RandomWordSection = () => {
         // Pick a random word from the stored data
         const randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
         setWordData(randomWord);
+        localStorage.setItem('randomWord', JSON.stringify(randomWord)); // Store the random Word 
       } else {
         // Fetch data from Firestore if not available in localStorage
         const wordsRef = collection(db, 'konkaniWords');
@@ -29,7 +31,7 @@ const RandomWordSection = () => {
         const randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
 
         setWordData(randomWord);
-
+        localStorage.setItem('randomWord', JSON.stringify(randomWord)); 
         // Store the fetched data in localStorage for future use
         localStorage.setItem('konkaniWords', JSON.stringify(wordsArray));
       }
@@ -38,8 +40,17 @@ const RandomWordSection = () => {
     }
   };
   useEffect(() => {
-    fetchRandomWord();  // Fetch an initial random word
+    // Check if wordData is already stored in localStorage
+    const randomWord = localStorage.getItem('randomWord');
+    if (randomWord) {
+      setWordData(JSON.parse(randomWord));
+    }
+    else{
+      fetchRandomWord();  // Fetch an initial random word
+    }
   }, []);
+
+  
 
   return (
     <div className=" flex-grow w-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 mx-auto p-4 min-h-full overflow-x-hidden ">
@@ -47,7 +58,7 @@ const RandomWordSection = () => {
     <div className="text-center">
       <button
         onClick={fetchRandomWord}
-        className=" my-10 px-6 py-2 focus:outline-none  bg-blue-500 dark:bg-blue-700 text-white font-medium rounded-md hover:bg-blue-600 dark:hover:bg-blue-600 transition"
+        className="mt-10 px-6 py-2 focus:outline-none  bg-blue-500 dark:bg-blue-700 text-white font-medium rounded-md hover:bg-blue-600 dark:hover:bg-blue-600 transition"
       >
         Get Random Word
       </button>
