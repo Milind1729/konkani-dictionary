@@ -2,10 +2,9 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-[#f1faf9] dark:bg-[#040404f7] p-6 shadow-md">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+    <footer className="bg-[#f1faf9] dark:bg-[#040404f7] p-6 shadow-md flex items-center justify-between">
         {/* Social Media Links */}
-        <div className="flex space-x-4 justify-center items-center">
+        <div className=" flex space-x-4 justify-center items-center h-fit">
           <a
             href="#"
             aria-label="Facebook"
@@ -13,7 +12,7 @@ const Footer = () => {
           >
             <svg
               fill="currentColor"
-              className="w-7 h-7"
+              className="w-6 h-6 md:w-7 md:h-7"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -27,7 +26,7 @@ const Footer = () => {
           >
             <svg
               fill="currentColor"
-              className="w-6 h-6"
+              className="w-5 h-5 md:w-6 md:h-6"
               viewBox="-143 145 512 512"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -42,11 +41,11 @@ const Footer = () => {
           <a
             href="#"
             aria-label="Instagram"
-            className="hover:text-[#d62976] dark:hover:text-[#d62976] dark:text-[#908a97] transition max-w-7 max-h-7"
+            className="hover:text-[#d62976] dark:hover:text-[#d62976] dark:text-[#908a97] transition"
           >
             <svg
               fill="currentColor"
-              className="w-7 h-7"
+              className="w-6 h-6 md:w-7 md:h-7"
               viewBox="-5.5 0 32 32"
               xmlns="http://www.w3.org/2000/svg"
             >
@@ -56,10 +55,9 @@ const Footer = () => {
         </div>
 
         {/* Rights and Love */}
-        <div className="text-sm text-[#5b6a72] dark:text-[#908a97]">
+        <div className=" text-[10px] md:text-sm text-[#5b6a72] dark:text-[#908a97]">
           Made with ❤️ | © {new Date().getFullYear()} All rights reserved.
         </div>
-      </div>
     </footer>
   );
 };

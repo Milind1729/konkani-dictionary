@@ -1,38 +1,62 @@
-import React, { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import MobileNavbar from './MobileNavBar';
 
-const Header = ({ isDarkMode, toggleTheme }) => {
+function MobileNavbar({ isDarkMode, toggleTheme }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  const menuButtonRef = useRef(null);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  // Close menu if click is outside of the menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)&&!menuButtonRef.current.contains(event.target)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <header className="flex items-center justify-between bg-[#f1faf9] dark:bg-[#040404f7] p-4 shadow-md">
-      <div className="flex items-center space-x-2">
-        <img
-          src="/dictionary.png"
-          alt="Logo"
-          className="w-8 h-8 object-contain"
-        />
-        <h1 className="text-2xl font-bold text-[#943444] dark:text-[#f1faf9]">
-          Konkani Dictionary
-        </h1>
-      </div>
+    <div className='md:hidden'>
+      {/* Hamburger Menu for Small Screens */}
+            <div className="flex items-center">
+              <button ref={menuButtonRef} onClick={toggleMenu} className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+              </button>
+            </div>
+      
 
-      <nav className="hidden md:flex space-x-4">
-        <Link to="/" className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
-          Home
-        </Link>
-        <Link to="/randomword" className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
-          Random Word
-        </Link>
-        {/* <Link to="/addword" className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
-          Add Words
-        </Link> */}
-        <Link to="/contact" className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]">
-          Contact
-        </Link>
-      </nav>
-
-      <div className="hidden md:flex items-center space-x-4">
+      {isMenuOpen && (
+        <div
+          ref={menuRef}
+          className={`overflow-hidden animate-expandDown flex absolute mt-2 top-16 right-1 bg-[#f1faf9] dark:bg-[#040404f7] rounded-lg shadow-lg p-4 space-y-4 flex-col `}>
+          <Link
+            to="/"
+            className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]"
+          >
+            Home
+          </Link>
+          <Link
+            to="/randomword"
+            className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]"
+          >
+            Random Word
+          </Link>
+          <Link
+            to="/contact"
+            className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]"
+          >
+            Contact
+          </Link>
+          <div className="flex items-center space-x-4">
         <select
           className="bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2"
           defaultValue="en"
@@ -122,9 +146,10 @@ const Header = ({ isDarkMode, toggleTheme }) => {
           )}
         </button>
       </div>
-      <MobileNavbar isDarkMode={isDarkMode} toggleTheme={toggleTheme}/>
-    </header>
+        </div>
+      )}
+    </div>
   );
-};
+}
 
-export default Header;
+export default MobileNavbar;

@@ -82,6 +82,16 @@ export default {
         "benefit-card-5": "url(assets/benefits/card-5.svg)",
         "benefit-card-6": "url(assets/benefits/card-6.svg)",
       },
+      keyframes: {
+        expandDown: {
+          "0%": { height: "0px", opacity: "0" },
+          "80%": { height: "fit", opacity: "0" }, // Expand first
+          "100%": { height: "fit", opacity: "1" }, // Then fade in
+        },
+      },
+      animation: {
+        expandDown: "expandDown 0.2s ease-out ",
+      },
     },
   },
   plugins: [
