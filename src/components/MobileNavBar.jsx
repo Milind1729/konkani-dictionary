@@ -37,7 +37,7 @@ function MobileNavbar({ isDarkMode, toggleTheme }) {
       {isMenuOpen && (
         <div
           ref={menuRef}
-          className={`overflow-hidden animate-expandDown flex absolute mt-2 top-16 right-1 bg-[#f1faf9] dark:bg-[#040404f7] rounded-lg shadow-lg p-4 space-y-4 flex-col `}>
+          className={`z-20 overflow-hidden animate-expandDown flex absolute mt-2 top-16 right-1 bg-[#f1faf9] dark:bg-[#040404f7] rounded-lg shadow-lg p-4 space-y-4 flex-col `}>
           <Link
             to="/"
             className="text-[#5b6a72] hover:text-[#943444] dark:hover:text-[#f1faf9]"
