@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import WordCard from './WordCard';
+import { db } from '../firebase'; // Import Firebase configuration
+import { collection, getDocs } from 'firebase/firestore';
+
 
 const SearchWordSection = () => {
   const [latinForm, setLatinForm] = useState('');
