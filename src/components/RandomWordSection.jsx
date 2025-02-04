@@ -58,7 +58,7 @@ const RandomWordSection = () => {
     <div className="text-center">
       <button
         onClick={fetchRandomWord}
-        className="mt-10 px-6 py-2 focus:outline-none  bg-blue-500 dark:bg-blue-700 text-white font-medium rounded-md hover:bg-blue-600 dark:hover:bg-blue-600 transition"
+        className="mt-6 px-6 py-2 focus:outline-none  bg-blue-500 dark:bg-blue-700 text-white font-medium rounded-md hover:bg-blue-600 dark:hover:bg-blue-600 transition"
       >
         Get Random Word
       </button>

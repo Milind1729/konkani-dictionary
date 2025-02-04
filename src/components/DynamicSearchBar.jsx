@@ -19,13 +19,27 @@ const DynamicSearchBar = ({setWordData}) => {
         if (storedData) {
           console.log('Using stored data from localStorage');
           const wordsArray = JSON.parse(storedData);
+
+          const filteredDevanagri = wordsArray.filter((item) =>
+            item.word.toLowerCase().startsWith(value.toLowerCase())
+          ).map((item)=>({ ...item, suggestionText: item.word }));
+
+          const filteredEnglish = wordsArray.map(item => {
+              const matchedDefinition = item.definitions.find(def => 
+                {const regex = new RegExp(`\\b${value.toLowerCase()}\\b`, "i"); // Case-insensitive word boundary match
+                return regex.test(def.toLowerCase());});
+              return matchedDefinition ? { ...item, suggestionText: matchedDefinition } : null;
+          }).filter(item => item !== null)
+
           // Ensure wordsArray is valid and filter out invalid objects
           const validWords = wordsArray.filter(word => word && word.latinForm);
           // Filter based on matching the query as a prefix (sun sequence match)
-          const filtered = validWords.filter((item) =>
+          const filteredLatin = validWords.filter((item) =>
             item.latinForm.toLowerCase().startsWith(value.toLowerCase())
-          );
-          setSuggestions(filtered);
+          ).map((item)=>({ ...item, suggestionText: capitalizeFirstLetter(item.latinForm)}));
+
+
+          setSuggestions(filteredDevanagri.concat(filteredLatin).concat(filteredEnglish));
           setIsOpen(true);
         } else {
           // Fetch data from Firestore if not available in localStorage
@@ -59,7 +73,7 @@ const DynamicSearchBar = ({setWordData}) => {
   
     // Function to handle selection of an item from suggestions
     const handleSelect = (item) => {
-      setQuery(capitalizeFirstLetter(item.latinForm)); // Set the search input to the selected item
+      setQuery(item.suggestionText); // Set the search input to the selected item
       setWordData(item);
       localStorage.setItem('lastSearchedWord', JSON.stringify(item)); 
       setSuggestions([]); // Clear the suggestions
@@ -72,8 +86,8 @@ const DynamicSearchBar = ({setWordData}) => {
           type="text"
           value={query}
           onChange={fetchSuggestions}
-          placeholder="Search a Konkani Word By Latin Form"
-          className="border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 rounded-md w-full shadow-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:outline-none"
+          placeholder="Search in Konkani or English"
+          className="mt-6 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 p-2 rounded-md w-full shadow-sm focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:outline-none"
         />
        {isOpen && query && suggestions.length > 0 && (
     <ul className="absolute left-0 right-0 mt-2 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 border border-[#7babdb] dark:border-[#5eafdc] rounded-md z-10 shadow-lg">
@@ -83,7 +97,7 @@ const DynamicSearchBar = ({setWordData}) => {
           className="px-4 py-2 hover:bg-[#bee2ff] dark:hover:bg-[#6187ae29] text-[#2e30319d] dark:text-[#f1faf9] cursor-pointer transition duration-200"
           onClick={() => handleSelect(item)}
         >
-          {capitalizeFirstLetter(item.latinForm)+" ("+item.word+")"}
+          {item.suggestionText}
         </li>
       ))}
     </ul>

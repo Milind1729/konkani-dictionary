@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MobileNavbar from './MobileNavBar';
 
-const Header = ({ isDarkMode, toggleTheme }) => {
+const Header = ({ isDarkMode, toggleTheme}) => {
 
   return (
     <header className="flex items-center justify-between bg-[#f1faf9] dark:bg-[#040404f7] p-4 shadow-md">

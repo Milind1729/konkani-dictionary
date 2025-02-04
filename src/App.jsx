@@ -24,6 +24,20 @@ function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
+
+  // useEffect(() => {
+  //   // Clear localStorage on tab close or page reload
+  //   const handleBeforeUnload = () => {
+  //     localStorage.clear(); // Clears all data in localStorage
+  //   };
+
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
+
   return (
     <div className='flex flex-col min-h-screen'>
       <Header isDarkMode={isDarkMode} toggleTheme={toggleTheme}/>
